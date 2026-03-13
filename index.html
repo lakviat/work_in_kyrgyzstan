@@ -241,10 +241,18 @@
       <div class="apply-card" role="dialog" aria-modal="true" aria-labelledby="applyTitle">
         <button class="apply-close" type="button" aria-label="Close application form" data-close-apply>&times;</button>
         <h2 id="applyTitle" class="apply-title">APPLY FOR A JOB</h2>
-        <form id="applyForm" class="apply-form">
+        <form id="applyForm" class="apply-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="access_key" value="371dd7f4-0e84-4baa-9d3b-ffda8b2f6660" />
+          <input type="hidden" name="subject" value="GSA Job Application" />
+          <input type="hidden" name="from_name" value="Global Staff Agency Careers" />
           <div class="apply-field">
             <label for="fullName">Full Name</label>
             <input id="fullName" name="fullName" type="text" placeholder="Full Name" required />
+          </div>
+
+          <div class="apply-field">
+            <label for="email">Email Address</label>
+            <input id="email" name="email" type="email" placeholder="Email Address" required />
           </div>
 
           <div class="apply-field">

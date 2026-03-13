@@ -123,7 +123,7 @@ if (mapElement && window.L) {
     .bindPopup('<strong>Karakol</strong><br>Current job openings in this region: 7');
 }
 
-const APPLICATION_ENDPOINT = '';
+const APPLICATION_ENDPOINT = 'https://api.web3forms.com/submit';
 
 const applyModal = document.getElementById('applyModal');
 const applyForm = document.getElementById('applyForm');
@@ -158,18 +158,18 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-const sendApplication = async (payload) => {
+const sendApplication = async (formData) => {
   if (!APPLICATION_ENDPOINT) {
-    return Promise.resolve();
+    return Promise.resolve({ ok: false, success: false });
   }
 
-  return fetch(APPLICATION_ENDPOINT, {
+  const response = await fetch(APPLICATION_ENDPOINT, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
+    body: formData
   });
+
+  const data = await response.json();
+  return { ok: response.ok, ...data };
 };
 
 if (applyForm) {
@@ -177,13 +177,16 @@ if (applyForm) {
     event.preventDefault();
 
     const formData = new FormData(applyForm);
-    const payload = Object.fromEntries(formData.entries());
 
     try {
-      await sendApplication(payload);
-      alert('Thank you. Your application has been submitted.');
-      applyForm.reset();
-      toggleApplyModal(false);
+      const result = await sendApplication(formData);
+      if (result.ok && result.success !== false) {
+        alert('Thank you. Your application has been submitted.');
+        applyForm.reset();
+        toggleApplyModal(false);
+      } else {
+        alert('There was a problem submitting your application. Please try again later.');
+      }
     } catch (error) {
       alert('There was a problem submitting your application. Please try again later.');
     }
