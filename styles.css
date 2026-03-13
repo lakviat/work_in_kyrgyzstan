@@ -36,7 +36,7 @@ a {
   left: 50%;
   transform: translateX(-50%);
   width: min(94%, 1140px);
-  padding: 0.75rem 1.1rem;
+  padding: 0.7rem 1.1rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.75);
@@ -59,6 +59,47 @@ a {
   background: var(--primary);
   color: #fff;
   font-weight: 800;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--text);
+}
+
+.brand-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background-color: transparent;
+  background-image: url("assets/gsa-logo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  border: 0;
+  box-shadow: none;
+  flex: 0 0 auto;
+}
+
+.brand-text {
+  display: grid;
+  gap: 0.1rem;
+  line-height: 1.1;
+}
+
+.brand-name {
+  font-weight: 800;
+  font-size: 0.96rem;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.brand-tag {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .nav {
@@ -139,9 +180,10 @@ a {
 }
 
 .hero-card h1 {
-  margin: 0.45rem 0 0.8rem;
-  font-size: clamp(1.8rem, 4.8vw, 3.4rem);
-  line-height: 1.1;
+  margin: 0.5rem 0 0.95rem;
+  font-size: clamp(2.1rem, 5.4vw, 3.8rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 .hero-card p {
@@ -149,12 +191,40 @@ a {
   line-height: 1.65;
 }
 
-.slogan {
-  margin-top: 1.3rem;
-  font-size: 0.9rem;
-  line-height: 1.7;
+.hero-card .eyebrow {
   color: rgba(255, 255, 255, 0.92);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.hero-sub {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 1.02rem;
+  line-height: 1.7;
+  margin-bottom: 1.4rem;
+}
+
+.hero-actions {
+  margin-top: 0.2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.hero-footer {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.slogan {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
   font-style: italic;
+  font-weight: 500;
 }
 
 .apply-modal {
@@ -262,12 +332,6 @@ body.modal-open {
   overflow: hidden;
 }
 
-.hero-actions {
-  margin-top: 1.1rem;
-  display: flex;
-  gap: 0.7rem;
-  flex-wrap: wrap;
-}
 
 .section {
   width: min(94%, 1140px);
@@ -589,6 +653,37 @@ body.modal-open {
   margin: 0.25rem 0;
 }
 
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.footer-logo-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background-image: url("assets/gsa-logo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  flex: 0 0 auto;
+}
+
+.footer-name {
+  margin: 0;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.footer-tag {
+  margin: 0.15rem 0 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
 .footer-links,
 .footer-connect {
   display: grid;
@@ -624,10 +719,13 @@ body.modal-open {
     width: min(94%, 720px);
   }
 
-  .logo {
-    width: 2.1rem;
-    height: 2.1rem;
-    font-size: 0.9rem;
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+  }
+
+  .brand-name {
+    font-size: 0.92rem;
   }
 
   .hero {
@@ -641,6 +739,10 @@ body.modal-open {
 
   .hero-actions .btn {
     width: 100%;
+  }
+
+  .hero-sub {
+    font-size: 0.98rem;
   }
 
   .slogan {
@@ -681,6 +783,10 @@ body.modal-open {
   .topbar {
     padding: 0.55rem 0.75rem;
     width: min(94%, 520px);
+  }
+
+  .brand-tag {
+    display: none;
   }
 
   .btn {
