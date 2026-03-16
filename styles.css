@@ -308,6 +308,25 @@ a {
   min-height: 80px;
 }
 
+.phone-inputs {
+  display: grid;
+  grid-template-columns: var(--phone-code-width, 110px) 1fr;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.phone-inputs select,
+.phone-inputs input {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 560px) {
+  .phone-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
 .btn-apply-submit {
   width: 100%;
   background: #0b63ce;

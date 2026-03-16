@@ -127,6 +127,9 @@ const APPLICATION_ENDPOINT = 'https://api.web3forms.com/submit';
 
 const applyModal = document.getElementById('applyModal');
 const applyForm = document.getElementById('applyForm');
+const currentLocationSelect = document.getElementById('currentLocation');
+const citizenshipSelect = document.getElementById('citizenship');
+const phoneCodeSelect = document.getElementById('phoneCode');
 
 const openApplyButtons = Array.from(document.querySelectorAll('[data-open-apply]'));
 const closeApplyElements = Array.from(document.querySelectorAll('[data-close-apply]'));
@@ -173,6 +176,42 @@ const sendApplication = async (formData) => {
 };
 
 if (applyForm) {
+  const updatePhoneCodeWidth = () => {
+    if (!phoneCodeSelect) {
+      return;
+    }
+
+    const wrapper = phoneCodeSelect.closest('.phone-inputs');
+    if (!wrapper) {
+      return;
+    }
+
+    const selectedText = phoneCodeSelect.options[phoneCodeSelect.selectedIndex]?.textContent?.trim() || 'Code';
+    const width = Math.max(92, Math.min(150, selectedText.length * 9 + 28));
+    wrapper.style.setProperty('--phone-code-width', `${width}px`);
+  };
+
+  const syncPhoneCode = (selectEl) => {
+    if (!selectEl || !phoneCodeSelect) {
+      return;
+    }
+    const option = selectEl.options[selectEl.selectedIndex];
+    const code = option?.dataset?.code;
+    if (!code) {
+      return;
+    }
+    const match = Array.from(phoneCodeSelect.options).find((opt) => opt.value === code);
+    if (match) {
+      phoneCodeSelect.value = code;
+      updatePhoneCodeWidth();
+    }
+  };
+
+  currentLocationSelect?.addEventListener('change', () => syncPhoneCode(currentLocationSelect));
+  citizenshipSelect?.addEventListener('change', () => syncPhoneCode(citizenshipSelect));
+  phoneCodeSelect?.addEventListener('change', updatePhoneCodeWidth);
+  updatePhoneCodeWidth();
+
   applyForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
