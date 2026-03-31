@@ -662,6 +662,8 @@ body.modal-open {
   background-size: cover;
   background-position: center;
   box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(30px) scale(0.985);
 }
 
 .photo-card::before {
@@ -673,11 +675,22 @@ body.modal-open {
 
 .photo-card,
 .photo-card::after {
-  transition: transform 0.35s ease;
+  transition:
+    transform 0.45s ease,
+    opacity 0.55s ease,
+    box-shadow 0.35s ease,
+    filter 0.35s ease;
+}
+
+.photo-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .photo-card:hover {
-  transform: scale(1.02);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 24px 48px rgba(16, 24, 40, 0.22);
+  filter: saturate(1.05);
 }
 
 .photo-overlay {
@@ -686,6 +699,8 @@ body.modal-open {
   z-index: 2;
   color: #fff;
   padding: 1.2rem;
+  transform: translateY(8px);
+  transition: transform 0.35s ease;
 }
 
 .photo-overlay h3 {
@@ -706,6 +721,10 @@ body.modal-open {
 
 .photo-card:hover .slide-btn {
   opacity: 1;
+  transform: translateY(0);
+}
+
+.photo-card:hover .photo-overlay {
   transform: translateY(0);
 }
 
@@ -751,6 +770,13 @@ body.modal-open {
   border-radius: 1rem;
   padding: 1.2rem;
   box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(26px) scale(0.985);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .benefits-grid h3 {
@@ -761,6 +787,17 @@ body.modal-open {
 .benefits-grid p {
   margin: 0.55rem 0 0;
   color: var(--muted);
+}
+
+.benefits-grid article.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.benefits-grid article:hover {
+  transform: translateY(-6px) scale(1.01);
+  border-color: rgba(212, 175, 55, 0.45);
+  box-shadow: 0 22px 42px rgba(16, 24, 40, 0.16);
 }
 
 .accordion {

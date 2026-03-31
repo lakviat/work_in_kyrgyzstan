@@ -34,6 +34,7 @@ processButtons.forEach((button) => {
 
 const impactSection = document.getElementById('impact');
 const impactNumbers = Array.from(document.querySelectorAll('.impact-number'));
+const revealCards = Array.from(document.querySelectorAll('[data-reveal]'));
 let hasAnimated = false;
 
 const runCounters = () => {
@@ -73,6 +74,25 @@ const counterObserver = new IntersectionObserver(
 if (impactSection) {
   counterObserver.observe(impactSection);
 }
+
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) {
+        return;
+      }
+
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    });
+  },
+  { threshold: 0.22 }
+);
+
+revealCards.forEach((card, index) => {
+  card.style.transitionDelay = `${index * 120}ms`;
+  revealObserver.observe(card);
+});
 
 const faqButtons = Array.from(document.querySelectorAll('.faq-question'));
 faqButtons.forEach((button) => {
