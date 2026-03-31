@@ -52,6 +52,47 @@
         <div class="hero-actions">
           <a class="btn btn-gold" href="#apply" data-open-apply>Apply Now</a>
           <a class="btn btn-outline" href="#jobs">Explore Openings</a>
+          <a
+            class="btn btn-nanny"
+            href="#apply"
+            data-open-apply
+            data-apply-category="Nannies &amp; Housekeepers"
+          >
+            Now Hiring Nannies
+          </a>
+        </div>
+        <div class="hero-callout">
+          <div class="nanny-spotlight">
+            <div class="nanny-spotlight-copy">
+              <p class="nanny-spotlight-label">Featured Opportunity</p>
+              <h3>Apply for a nanny role with salary, housing, food, visa, and flights covered.</h3>
+              <p class="nanny-spotlight-text">
+                We are actively hiring English-speaking nannies for host families in Kyrgyzstan. Compensation starts from <strong>$550-$600</strong> with full accommodation and relocation support included.
+              </p>
+            </div>
+            <a
+              class="btn btn-gold btn-nanny-apply"
+              href="#apply"
+              data-open-apply
+              data-apply-category="Nannies &amp; Housekeepers"
+            >
+              Apply for Nanny Role
+            </a>
+          </div>
+          <details class="nanny-details">
+            <summary>Role details and requirements</summary>
+            <div class="nanny-details-panel">
+              <p>
+                Nanny salaries range from <strong>$550 to $600</strong> per month on a <strong>one-year contract</strong>. The role is live-in with the host family, and <strong>food, accommodation, flights, and visa support are fully covered</strong> for Indonesian nannies.
+              </p>
+              <p>
+                Candidates should have <strong>good English skills</strong> and preferably prior experience working with children. The role is a hybrid of approximately <strong>60% housekeeping</strong> and <strong>40% childcare</strong>.
+              </p>
+              <p>
+                Applicants must already have a valid <strong>international passport</strong>. GSA provides full legal support, protection, and documentation throughout the placement and relocation process.
+              </p>
+            </div>
+          </details>
         </div>
         <div class="hero-footer">
           <p class="slogan">
@@ -249,10 +290,15 @@
       <div class="apply-card" role="dialog" aria-modal="true" aria-labelledby="applyTitle">
         <button class="apply-close" type="button" aria-label="Close application form" data-close-apply>&times;</button>
         <h2 id="applyTitle" class="apply-title">APPLY FOR A JOB</h2>
-        <form id="applyForm" class="apply-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="access_key" value="371dd7f4-0e84-4baa-9d3b-ffda8b2f6660" />
-          <input type="hidden" name="subject" value="GSA Job Application" />
-          <input type="hidden" name="from_name" value="Global Staff Agency Careers" />
+        <form
+          id="applyForm"
+          class="apply-form"
+          action=""
+          method="POST"
+          enctype="multipart/form-data"
+          data-endpoint="https://script.google.com/macros/s/AKfycbxP7lF7IuRoMmiXXyQm-lCNHMtvsEZ7Mlsrc9MauegPOXZcGBi8-HmSCDfw7b_4PJ_x/exec"
+        >
+          <input type="hidden" name="submissionSource" value="jobsinkyrgyzstan.com" />
           <div class="apply-field">
             <label for="fullName">Full Legal Name</label>
             <input id="fullName" name="fullName" type="text" placeholder="First and Last Name" required />
@@ -882,6 +928,32 @@
             <label for="description">Description</label>
             <textarea id="description" name="description" rows="3" placeholder="Description"></textarea>
           </div>
+
+          <div class="apply-field">
+            <label for="resumeAttachment">Resume</label>
+            <input
+              id="resumeAttachment"
+              name="resumeAttachment"
+              type="file"
+              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+            />
+            <small class="apply-field-note">Accepted: PDF, DOC, DOCX, TXT, JPG, PNG. Max size: 5 MB. File will be stored in Google Drive and included in the email as a link.</small>
+            <small id="resumeAttachmentError" class="apply-field-error" hidden></small>
+          </div>
+
+          <div class="apply-field">
+            <label for="passportAttachment">Documents International Passport</label>
+            <input
+              id="passportAttachment"
+              name="passportAttachment"
+              type="file"
+              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
+            />
+            <small class="apply-field-note">Optional passport or supporting document. Accepted: PDF, DOC, DOCX, TXT, JPG, PNG. Max size: 5 MB.</small>
+            <small id="passportAttachmentError" class="apply-field-error" hidden></small>
+          </div>
+
+          <p id="applyStatus" class="apply-status" hidden></p>
 
           <div class="apply-actions">
             <button type="submit" class="btn btn-apply-submit">Submit Application</button>

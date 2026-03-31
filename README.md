@@ -3,7 +3,7 @@
 Official marketing and recruitment landing site for **Global Staff Agency (GSA)**.
 
 This is a static website focused on inbound international hiring for the Kyrgyz Republic and Central Asia.  
-It includes a hero landing page, job categories, process flow, map, FAQ, and a Web3Forms-powered application modal.
+It includes a hero landing page, job categories, process flow, map, FAQ, and an application modal that can submit into Google Apps Script.
 
 ## Live Domain
 
@@ -47,25 +47,32 @@ Then open:
   - Citizenship
   - Job category
   - Description
+  - Resume upload
+  - International passport / document upload
 - Footer with contact links and Instagram
 
-## Form Submission (Web3Forms)
+## Form Submission (Google Apps Script)
 
-The form posts directly to Web3Forms:
+The frontend is now prepared to send applications to a Google Apps Script web app:
 
-- Endpoint: `https://api.web3forms.com/submit`
 - Form element: [`index.html`](./index.html) (`#applyForm`)
+- Config location: `data-endpoint=""` attribute on the form
+- Backend template: [`apps-script/`](./apps-script)
 
 Current behavior:
 
 - Selecting **Current Location** or **Citizenship** auto-populates the phone code when a code exists.
 - Phone code field dynamically resizes for longer values.
+- Both attachment fields are converted to base64 in the browser and sent to Apps Script.
+- Apps Script stores both uploads in Google Drive and emails their Drive links to `globalstaffagencykg@gmail.com`.
 
-If you need to update form routing:
+To finish the setup:
 
-1. Update `access_key` hidden input in [`index.html`](./index.html).
-2. Confirm linked receiver email in Web3Forms dashboard.
-3. If domain restriction is enabled in Web3Forms, allow this domain.
+1. Deploy the Apps Script web app from [`apps-script/README.md`](./apps-script/README.md).
+2. Copy the `/exec` URL.
+3. Paste that URL into the form `data-endpoint` in [`index.html`](./index.html).
+
+Until that endpoint is added, the form will not submit.
 
 ## SEO Files
 
@@ -90,4 +97,4 @@ Deployment is automated with GitHub Pages:
 - Visual styling, spacing, typography: [`styles.css`](./styles.css)
 - UI interactions (modal, auto-fill, FAQ, map): [`script.js`](./script.js)
 - Logo file: [`assets/gsa-logo.png`](./assets/gsa-logo.png)
-
+- Google Apps Script backend: [`apps-script/`](./apps-script)

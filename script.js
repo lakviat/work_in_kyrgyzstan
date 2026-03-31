@@ -123,13 +123,22 @@ if (mapElement && window.L) {
     .bindPopup('<strong>Karakol</strong><br>Current job openings in this region: 7');
 }
 
-const APPLICATION_ENDPOINT = 'https://api.web3forms.com/submit';
-
 const applyModal = document.getElementById('applyModal');
 const applyForm = document.getElementById('applyForm');
 const currentLocationSelect = document.getElementById('currentLocation');
 const citizenshipSelect = document.getElementById('citizenship');
 const phoneCodeSelect = document.getElementById('phoneCode');
+const jobCategorySelect = document.getElementById('jobCategory');
+const descriptionField = document.getElementById('description');
+const resumeAttachmentInput = document.getElementById('resumeAttachment');
+const passportAttachmentInput = document.getElementById('passportAttachment');
+const resumeAttachmentError = document.getElementById('resumeAttachmentError');
+const passportAttachmentError = document.getElementById('passportAttachmentError');
+const applyStatus = document.getElementById('applyStatus');
+const APPLICATION_ENDPOINT = applyForm?.dataset.endpoint?.trim() || '';
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+const ALLOWED_ATTACHMENT_EXTENSIONS = ['pdf', 'doc', 'docx', 'txt', 'jpg', 'jpeg', 'png'];
+const GOOGLE_APPS_SCRIPT_PATTERN = /script\.google(?:usercontent)?\.com/i;
 
 const openApplyButtons = Array.from(document.querySelectorAll('[data-open-apply]'));
 const closeApplyElements = Array.from(document.querySelectorAll('[data-close-apply]'));
@@ -142,9 +151,27 @@ const toggleApplyModal = (isOpen) => {
   document.body.classList.toggle('modal-open', isOpen);
 };
 
+const prefillApplicationForm = (button) => {
+  if (!button || !applyForm) {
+    return;
+  }
+
+  const category = button.dataset.applyCategory;
+  const description = button.dataset.applyDescription;
+
+  if (category && jobCategorySelect) {
+    jobCategorySelect.value = category;
+  }
+
+  if (description && descriptionField && !descriptionField.value.trim()) {
+    descriptionField.value = description;
+  }
+};
+
 openApplyButtons.forEach((button) => {
   button.addEventListener('click', (event) => {
     event.preventDefault();
+    prefillApplicationForm(button);
     toggleApplyModal(true);
   });
 });
@@ -161,21 +188,141 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-const sendApplication = async (formData) => {
+const setApplyStatus = (message, type = 'info') => {
+  if (!applyStatus) {
+    return;
+  }
+  applyStatus.textContent = message || '';
+  applyStatus.hidden = !message;
+  applyStatus.dataset.state = message ? type : '';
+};
+
+const readFileAsBase64 = (file) => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    const result = typeof reader.result === 'string' ? reader.result : '';
+    const [, base64 = ''] = result.split(',');
+    resolve(base64);
+  };
+
+  reader.onerror = () => reject(new Error('Unable to read attachment.'));
+  reader.readAsDataURL(file);
+});
+
+const buildAttachmentPayload = async (file, label) => ({
+  label,
+  name: file.name,
+  mimeType: file.type || 'application/octet-stream',
+  size: file.size,
+  base64: await readFileAsBase64(file)
+});
+
+const buildApplicationPayload = async () => {
+  const resumeFile = resumeAttachmentInput?.files?.[0];
+  const passportFile = passportAttachmentInput?.files?.[0];
+  const payload = {
+    submissionSource: applyForm?.elements?.submissionSource?.value || 'jobsinkyrgyzstan.com',
+    submittedAt: new Date().toISOString(),
+    fullLegalName: applyForm?.elements?.fullName?.value?.trim() || '',
+    currentLocation: currentLocationSelect?.value || '',
+    phoneCode: phoneCodeSelect?.value || '',
+    phoneNumber: applyForm?.elements?.phoneNumber?.value?.trim() || '',
+    fullPhoneNumber: `${phoneCodeSelect?.value || ''} ${applyForm?.elements?.phoneNumber?.value?.trim() || ''}`.trim(),
+    email: applyForm?.elements?.email?.value?.trim() || '',
+    citizenship: citizenshipSelect?.value || '',
+    jobCategory: applyForm?.elements?.jobCategory?.value || '',
+    description: applyForm?.elements?.description?.value?.trim() || '',
+    attachments: []
+  };
+
+  if (resumeFile) {
+    payload.attachments.push(await buildAttachmentPayload(resumeFile, 'Resume'));
+  }
+
+  if (passportFile) {
+    payload.attachments.push(await buildAttachmentPayload(passportFile, 'Documents International Passport'));
+  }
+
+  return payload;
+};
+
+const sendApplication = async (payload) => {
   if (!APPLICATION_ENDPOINT) {
-    return Promise.resolve({ ok: false, success: false });
+    throw new Error('Apps Script endpoint is not configured yet. Paste your deployed web app URL into the form data-endpoint attribute in index.html.');
+  }
+
+  const requestBody = JSON.stringify(payload);
+  const isGoogleAppsScriptEndpoint = GOOGLE_APPS_SCRIPT_PATTERN.test(APPLICATION_ENDPOINT);
+
+  if (isGoogleAppsScriptEndpoint) {
+    await fetch(APPLICATION_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: requestBody
+    });
+
+    return {
+      ok: true,
+      accepted: true,
+      message: 'Application received. Check your email inbox and Google Drive folder to verify delivery.'
+    };
   }
 
   const response = await fetch(APPLICATION_ENDPOINT, {
     method: 'POST',
-    body: formData
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: requestBody
   });
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
   return { ok: response.ok, ...data };
 };
 
 if (applyForm) {
+  const setAttachmentError = (input, errorEl, message) => {
+    if (!errorEl) {
+      return;
+    }
+    errorEl.textContent = message || '';
+    errorEl.hidden = !message;
+    if (message) {
+      input?.setAttribute('aria-invalid', 'true');
+    } else {
+      input?.removeAttribute('aria-invalid');
+    }
+  };
+
+  const validateAttachmentInput = (input, errorEl, fieldLabel) => {
+    const file = input?.files?.[0];
+    if (!file) {
+      setAttachmentError(input, errorEl, '');
+      return true;
+    }
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    if (!ALLOWED_ATTACHMENT_EXTENSIONS.includes(extension)) {
+      setAttachmentError(input, errorEl, `${fieldLabel}: unsupported file type. Use PDF, DOC, DOCX, TXT, JPG, JPEG, or PNG.`);
+      return false;
+    }
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      setAttachmentError(input, errorEl, `${fieldLabel}: maximum allowed file size is 5 MB.`);
+      return false;
+    }
+    setAttachmentError(input, errorEl, '');
+    return true;
+  };
+
+  const validateAttachments = () => {
+    const resumeValid = validateAttachmentInput(resumeAttachmentInput, resumeAttachmentError, 'Resume');
+    const passportValid = validateAttachmentInput(passportAttachmentInput, passportAttachmentError, 'Documents International Passport');
+    return resumeValid && passportValid;
+  };
+
   const updatePhoneCodeWidth = () => {
     if (!phoneCodeSelect) {
       return;
@@ -210,24 +357,53 @@ if (applyForm) {
   currentLocationSelect?.addEventListener('change', () => syncPhoneCode(currentLocationSelect));
   citizenshipSelect?.addEventListener('change', () => syncPhoneCode(citizenshipSelect));
   phoneCodeSelect?.addEventListener('change', updatePhoneCodeWidth);
+  resumeAttachmentInput?.addEventListener('change', () => validateAttachmentInput(resumeAttachmentInput, resumeAttachmentError, 'Resume'));
+  passportAttachmentInput?.addEventListener('change', () => validateAttachmentInput(passportAttachmentInput, passportAttachmentError, 'Documents International Passport'));
   updatePhoneCodeWidth();
 
   applyForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+    setApplyStatus('');
 
-    const formData = new FormData(applyForm);
+    if (!validateAttachments()) {
+      if (resumeAttachmentError && !resumeAttachmentError.hidden) {
+        resumeAttachmentInput?.focus();
+      } else if (passportAttachmentError && !passportAttachmentError.hidden) {
+        passportAttachmentInput?.focus();
+      }
+      return;
+    }
+    const submitButton = applyForm.querySelector('button[type="submit"]');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting...';
+    }
 
     try {
-      const result = await sendApplication(formData);
+      const payload = await buildApplicationPayload();
+      const result = await sendApplication(payload);
+
       if (result.ok && result.success !== false) {
-        alert('Thank you. Your application has been submitted.');
+        setApplyStatus('Thank you. Your application has been submitted.', 'success');
         applyForm.reset();
-        toggleApplyModal(false);
+        setAttachmentError(resumeAttachmentInput, resumeAttachmentError, '');
+        setAttachmentError(passportAttachmentInput, passportAttachmentError, '');
+        updatePhoneCodeWidth();
+        window.setTimeout(() => {
+          setApplyStatus('');
+          toggleApplyModal(false);
+        }, 900);
       } else {
-        alert('There was a problem submitting your application. Please try again later.');
+        const errorMessage = result.message || 'There was a problem submitting your application. Please try again later.';
+        setApplyStatus(errorMessage, 'error');
       }
     } catch (error) {
-      alert('There was a problem submitting your application. Please try again later.');
+      setApplyStatus(error.message || 'There was a problem submitting your application. Please try again later.', 'error');
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+      }
     }
   });
 }
