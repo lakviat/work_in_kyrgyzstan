@@ -800,6 +800,183 @@ body.modal-open {
   box-shadow: 0 22px 42px rgba(16, 24, 40, 0.16);
 }
 
+.section-copy {
+  max-width: 760px;
+  margin: -0.2rem 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.video-card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--line);
+  border-radius: 1.2rem;
+  background: var(--surface);
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  transition:
+    transform 0.45s ease,
+    opacity 0.55s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.video-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.video-card:hover {
+  transform: translateY(-8px) scale(1.01);
+  border-color: rgba(212, 175, 55, 0.42);
+  box-shadow: 0 24px 48px rgba(16, 24, 40, 0.18);
+}
+
+.video-card-media {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  background-image:
+    linear-gradient(180deg, rgba(6, 78, 59, 0.18), rgba(6, 78, 59, 0.72)),
+    var(--poster);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.video-card-play,
+.video-card-length {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.video-card-play {
+  background: var(--accent);
+  color: #201607;
+  box-shadow: var(--gold-glow);
+}
+
+.video-card-length {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+
+.video-card-body {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem 1rem 1.05rem;
+}
+
+.video-card-body strong {
+  font-size: 1rem;
+  line-height: 1.35;
+  color: #0f3d2f;
+}
+
+.video-card-body span {
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.video-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+
+.video-modal.open {
+  display: flex;
+}
+
+.video-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.video-modal-card {
+  position: relative;
+  z-index: 2;
+  width: min(94%, 880px);
+  padding: 1.2rem;
+  border-radius: 1.3rem;
+  background: rgba(248, 250, 249, 0.98);
+  box-shadow: 0 28px 60px rgba(16, 24, 40, 0.24);
+}
+
+.video-modal-close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  border: 0;
+  background: transparent;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.video-frame-wrap {
+  width: min(100%, 360px);
+  margin: 0 auto;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #111827;
+  aspect-ratio: 9 / 16;
+}
+
+.video-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-modal-copy {
+  max-width: 560px;
+  margin: 0.95rem auto 0;
+  text-align: center;
+}
+
+.video-modal-copy h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.video-modal-copy p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .accordion {
   display: grid;
   gap: 0.65rem;
@@ -1009,6 +1186,7 @@ body.modal-open {
   .impact-grid,
   .job-grid,
   .benefits-grid,
+  .video-grid,
   .footer {
     grid-template-columns: 1fr;
   }
@@ -1065,6 +1243,10 @@ body.modal-open {
     font-size: 0.98rem;
   }
 
+  .video-frame-wrap {
+    width: min(100%, 320px);
+  }
+
   .slogan {
     font-size: 0.85rem;
   }
@@ -1115,6 +1297,14 @@ body.modal-open {
 
   .hero-card h1 {
     font-size: 1.9rem;
+  }
+
+  .video-card-body strong {
+    font-size: 0.96rem;
+  }
+
+  .video-card-body span {
+    font-size: 0.88rem;
   }
 
   .apply-card {

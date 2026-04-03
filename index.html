@@ -67,7 +67,7 @@
               <p class="nanny-spotlight-label">Featured Opportunity</p>
               <h3>Apply for a nanny role with salary, housing, food, visa, and flights covered.</h3>
               <p class="nanny-spotlight-text">
-                We are actively hiring English-speaking nannies for host families in Kyrgyzstan. Compensation starts from <strong>$550-$600</strong> with full accommodation and relocation support included.
+                We are actively hiring English-speaking nannies for host families in Kyrgyzstan.  Strong Compensation  with full accommodation and relocation support included.
               </p>
             </div>
             <a
@@ -83,7 +83,7 @@
             <summary>Role details and requirements</summary>
             <div class="nanny-details-panel">
               <p>
-                Nanny salaries range from <strong>$550 to $600</strong> per month on a <strong>one-year contract</strong>. The role is live-in with the host family, and <strong>food, accommodation, flights, and visa support are fully covered</strong> for Indonesian nannies.
+                Nanny salaries with a strong compensation  and full accommodation relocation support included  with one year contract. The role is live-in with the host family, and <strong>food, accommodation, flights, and visa support are fully covered</strong> for Indonesian nannies.
               </p>
               <p>
                 Candidates should have <strong>good English skills</strong> and preferably prior experience working with children. The role is a hybrid of approximately <strong>60% housekeeping</strong> and <strong>40% childcare</strong>.
@@ -120,6 +120,70 @@
           <h3>Lower Cost of Living</h3>
           <p>Competitive living costs help workers save more while building long-term careers.</p>
         </article>
+      </div>
+    </section>
+
+    <section class="section worker-videos" id="worker-videos">
+      <div class="section-head">
+        <p class="eyebrow">Real Worker Experiences</p>
+        <h2>Hear Directly From Our Workers</h2>
+        <p class="section-copy">Short video snapshots from workers and candidates experiencing life, relocation, and job placement in Kyrgyzstan.</p>
+      </div>
+      <div class="video-grid">
+        <button
+          class="video-card"
+          type="button"
+          data-reveal
+          data-video-title="Arrival and First Impressions"
+          data-video-caption="A quick look at what arrival and first days in Kyrgyzstan feel like."
+          data-video-src="https://drive.google.com/file/d/13IbdsG_OJvljdcK9v7t96L1E7riXxmHC/preview"
+          style="--poster:url('https://drive.google.com/thumbnail?id=13IbdsG_OJvljdcK9v7t96L1E7riXxmHC&sz=w1000')"
+        >
+          <span class="video-card-media">
+            <span class="video-card-play" aria-hidden="true">Play</span>
+            <span class="video-card-length">Worker Story</span>
+          </span>
+          <span class="video-card-body">
+            <strong>Arrival and First Impressions</strong>
+            <span>A real look at settling into a new opportunity in Kyrgyzstan.</span>
+          </span>
+        </button>
+        <button
+          class="video-card"
+          type="button"
+          data-reveal
+          data-video-title="Daily Life and Work Experience"
+          data-video-caption="A worker’s perspective on day-to-day life, work environment, and support on the ground."
+          data-video-src="https://drive.google.com/file/d/1l4AyGsRTqKzROmEOWwrZzA0RDQl860nD/preview"
+          style="--poster:url('https://drive.google.com/thumbnail?id=1l4AyGsRTqKzROmEOWwrZzA0RDQl860nD&sz=w1000')"
+        >
+          <span class="video-card-media">
+            <span class="video-card-play" aria-hidden="true">Play</span>
+            <span class="video-card-length">On the Job</span>
+          </span>
+          <span class="video-card-body">
+            <strong>Daily Life and Work Experience</strong>
+            <span>Authentic footage showing the environment and support workers receive.</span>
+          </span>
+        </button>
+        <button
+          class="video-card"
+          type="button"
+          data-reveal
+          data-video-title="Candidate Feedback"
+          data-video-caption="Personal feedback from a worker sharing their experience with relocation and placement."
+          data-video-src="https://drive.google.com/file/d/1mX8b_F8sZqu0EZS8qWwmAwSlhuOcmB4O/preview"
+          style="--poster:url('https://drive.google.com/thumbnail?id=1mX8b_F8sZqu0EZS8qWwmAwSlhuOcmB4O&sz=w1000')"
+        >
+          <span class="video-card-media">
+            <span class="video-card-play" aria-hidden="true">Play</span>
+            <span class="video-card-length">Candidate Voice</span>
+          </span>
+          <span class="video-card-body">
+            <strong>Candidate Feedback</strong>
+            <span>First-hand comments about relocation, support, and working conditions.</span>
+          </span>
+        </button>
       </div>
     </section>
 
@@ -959,6 +1023,28 @@
             <button type="submit" class="btn btn-apply-submit">Submit Application</button>
           </div>
         </form>
+      </div>
+    </section>
+
+    <section class="video-modal" id="videoModal" aria-hidden="true">
+      <div class="video-modal-backdrop" data-close-video></div>
+      <div class="video-modal-card" role="dialog" aria-modal="true" aria-labelledby="videoModalTitle">
+        <button class="video-modal-close" type="button" aria-label="Close video" data-close-video>&times;</button>
+        <div class="video-frame-wrap">
+          <iframe
+            id="workerVideoFrame"
+            class="video-frame"
+            src=""
+            title="Worker video"
+            loading="lazy"
+            allow="autoplay; fullscreen"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <div class="video-modal-copy">
+          <h3 id="videoModalTitle">Worker Experience</h3>
+          <p id="videoModalCaption"></p>
+        </div>
       </div>
     </section>
   </main>

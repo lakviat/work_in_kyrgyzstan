@@ -35,6 +35,12 @@ processButtons.forEach((button) => {
 const impactSection = document.getElementById('impact');
 const impactNumbers = Array.from(document.querySelectorAll('.impact-number'));
 const revealCards = Array.from(document.querySelectorAll('[data-reveal]'));
+const videoModal = document.getElementById('videoModal');
+const workerVideoFrame = document.getElementById('workerVideoFrame');
+const videoModalTitle = document.getElementById('videoModalTitle');
+const videoModalCaption = document.getElementById('videoModalCaption');
+const videoCards = Array.from(document.querySelectorAll('.video-card'));
+const closeVideoElements = Array.from(document.querySelectorAll('[data-close-video]'));
 let hasAnimated = false;
 
 const runCounters = () => {
@@ -92,6 +98,39 @@ const revealObserver = new IntersectionObserver(
 revealCards.forEach((card, index) => {
   card.style.transitionDelay = `${index * 120}ms`;
   revealObserver.observe(card);
+});
+
+const toggleVideoModal = (isOpen) => {
+  if (!videoModal) {
+    return;
+  }
+
+  videoModal.classList.toggle('open', isOpen);
+  videoModal.setAttribute('aria-hidden', String(!isOpen));
+  document.body.classList.toggle('modal-open', isOpen || applyModal?.classList.contains('open'));
+
+  if (!isOpen && workerVideoFrame) {
+    workerVideoFrame.src = '';
+  }
+};
+
+videoCards.forEach((card) => {
+  card.addEventListener('click', () => {
+    if (!workerVideoFrame || !videoModalTitle || !videoModalCaption) {
+      return;
+    }
+
+    workerVideoFrame.src = card.dataset.videoSrc || '';
+    videoModalTitle.textContent = card.dataset.videoTitle || 'Worker Experience';
+    videoModalCaption.textContent = card.dataset.videoCaption || '';
+    toggleVideoModal(true);
+  });
+});
+
+closeVideoElements.forEach((element) => {
+  element.addEventListener('click', () => {
+    toggleVideoModal(false);
+  });
 });
 
 const faqButtons = Array.from(document.querySelectorAll('.faq-question'));
@@ -168,7 +207,7 @@ const toggleApplyModal = (isOpen) => {
     return;
   }
   applyModal.classList.toggle('open', isOpen);
-  document.body.classList.toggle('modal-open', isOpen);
+  document.body.classList.toggle('modal-open', isOpen || videoModal?.classList.contains('open'));
 };
 
 const prefillApplicationForm = (button) => {
@@ -204,6 +243,7 @@ closeApplyElements.forEach((el) => {
 
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
+    toggleVideoModal(false);
     toggleApplyModal(false);
   }
 });
